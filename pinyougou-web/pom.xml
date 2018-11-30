@@ -12,6 +12,7 @@
     <modules>
         <module>pinyougou-manager-web</module>
         <module>pinyougou_shop_web</module>
+        <module>pinyougou-portal-web</module>
 
     </modules>
     <artifactId>pinyougou-web</artifactId>

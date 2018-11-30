@@ -10,6 +10,7 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
@@ -21,6 +22,9 @@ public class ContentServiceImpl implements ContentService {
 
 	@Autowired
 	private ContentMapper contentMapper;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 
 	@Override
@@ -50,6 +54,7 @@ public class ContentServiceImpl implements ContentService {
 			Example.Criteria criteria=example.createCriteria();
 			criteria.andIn("id",Arrays.asList(ids));
 			contentMapper.deleteByExample(example);
+			redisTemplate.delete("content");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -60,6 +65,7 @@ public class ContentServiceImpl implements ContentService {
 	public void save(Content content) {
 		try {
 			contentMapper.insertSelective(content);
+			redisTemplate.delete("content");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -70,6 +76,25 @@ public class ContentServiceImpl implements ContentService {
 	public void update(Content content) {
 		try {
 			contentMapper.updateByPrimaryKeySelective(content);
+			redisTemplate.delete("content");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public List<Content> findContentByCategoryId(Long categoryId) {
+		List<Content> contentList=null;
+		try {
+			contentList= (List<Content>) redisTemplate.boundValueOps("content").get();
+			if (contentList!=null && contentList.size()>0){
+				return contentList;
+			}else {
+				contentList=contentMapper.findContentByCategoryId(categoryId,"1");
+				redisTemplate.boundValueOps("content").set(contentList);
+			return contentList;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
