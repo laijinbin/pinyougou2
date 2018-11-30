@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!--开启驼峰命名方便自动映射-,如数据库是P_id，会自动映射成实体类的pid-->
+        <!--就是下划线去掉，原本下划线后的的那个字母大写-->
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+    </settings>
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--数据库方言配置-->
+            <!--<property name="dialect" value="mysql"></property>-->
+            <!--配置开启统计查询-->
+            <property name="rowBoundsWithCount" value="true"></property>
+        </plugin>
+    </plugins>
+
+    <!-- Continue going here -->
+
+</configuration>

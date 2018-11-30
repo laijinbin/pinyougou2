@@ -1,0 +1,1 @@
+app.service("sellerCheckService", function($http){});

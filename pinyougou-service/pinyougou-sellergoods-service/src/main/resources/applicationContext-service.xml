@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--加载属性配置文件-->
+    <context:property-placeholder location="classpath:props/db.properties"></context:property-placeholder>
+    <!--导入数据访问配置文件-->
+    <import resource="classpath:applicationContext-mapper.xml"></import>
+
+    <!--配置duboo服务提供者-->
+    <dubbo:application name="pinyougou-sellergoods-service"></dubbo:application>
+    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
+    <dubbo:protocol name="dubbo" port="20880"></dubbo:protocol>
+    <dubbo:annotation package="com.pinyougou.sellergoods.service.impl"></dubbo:annotation>
+    <!--<dubbo:service interface="com.pinyougou.service.BrandService" ref="brandService"></dubbo:service>-->
+    <!--<bean id="brandService" class="com.pinyougou.sellergoods.service.impl.BrandServiceImpl"></bean>-->
+</beans>

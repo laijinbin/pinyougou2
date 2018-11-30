@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+        <security:http pattern="/*.html" security="none"></security:http>
+        <security:http pattern="/css/**" security="none"></security:http>
+        <security:http pattern="/img/**" security="none"></security:http>
+        <security:http pattern="/plugins/**" security="none"></security:http>
+        <security:http pattern="/js/**" security="none"></security:http>
+        <security:http pattern="/seller/save" security="none"></security:http>
+    <security:http auto-config="true" use-expressions="true">
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_SELLER')"></security:intercept-url>
+        <security:form-login
+            login-page="/shoplogin.html"
+            login-processing-url="/login"
+            default-target-url="/admin/index.html"
+            always-use-default-target="true"
+            authentication-failure-url="/shoplogin.html"></security:form-login>
+        <security:logout
+            logout-url="/logout"
+            logout-success-url="/shoplogin.html"></security:logout>
+        <security:csrf disabled="true"></security:csrf>
+
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"></security:frame-options>
+        </security:headers>
+    </security:http>
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userDetailsService">
+            <security:password-encoder ref="bCryptPasswordEncoder"></security:password-encoder>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <dubbo:application name="pinyougou_shop_web"></dubbo:application>
+    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
+    <dubbo:reference interface="com.pinyougou.service.SellerService" id="sellerService"></dubbo:reference>
+    <bean id="userDetailsService" class="com.pinyougou.shop.service.UserDetailsServiceImpl">
+        <property name="sellerService" ref="sellerService"></property>
+    </bean>
+    <bean id="bCryptPasswordEncoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+    
+
+
+</beans>
