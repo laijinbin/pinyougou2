@@ -5,7 +5,6 @@
 	<meta charset="utf-8"/>
 	<title>品优购，优质！优质！</title>
 	<link rel="icon" href="/assets/img/favicon.ico">
-
     <link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
     
 	<link rel="stylesheet" type="text/css" href="/css/pages-JD-index.css"/>
@@ -73,8 +72,12 @@
 							<form action="" class="sui-form form-inline">
 								<!--searchAutoComplete-->
 								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+									<input type="text" id="autocomplete"
+										   ng-model="keywords"
+										   type="text" class="input-error input-xxlarge" />
+									<button class="sui-btn btn-xlarge btn-danger"
+											ng-click="search();"
+											type="button">搜索</button>
 								</div>
 							</form>
 						</div>

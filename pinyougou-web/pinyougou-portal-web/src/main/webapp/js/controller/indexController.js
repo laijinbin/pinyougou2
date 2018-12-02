@@ -7,5 +7,12 @@ app.controller("indexController", function($scope, baseService){
             });
     };
 
+    $scope.search=function () {
+        var keyword = $scope.keywords?$scope.keywords : "";
+
+        location.href="http://search.pinyougou.com?keywords=" + keyword;
+
+    };
+
 
 });
