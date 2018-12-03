@@ -8,13 +8,16 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.Goods;
+import com.pinyougou.pojo.GoodsDesc;
 import com.pinyougou.pojo.Item;
 import com.pinyougou.pojo.ItemCat;
 import com.pinyougou.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -135,6 +138,38 @@ public class GoodsServiceImpl implements GoodsService {
     public void updateMarketable(Long[] ids, String marketable) {
         try {
             goodsMapper.updateMarketable(ids,marketable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Map<String, Object> getGoods(Long goodsId) {
+        Map<String, Object> data= null;
+        try {
+            data = new HashMap<>();
+            Goods goods=goodsMapper.selectByPrimaryKey(goodsId);
+            data.put("goods",goods);
+            GoodsDesc goodsDesc=goodsDescMapper.selectByPrimaryKey(goods.getId());
+            data.put("goodsDesc",goodsDesc);
+            if (goods!=null && goods.getCategory3Id()!=null){
+                String itemCat1=itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
+                String itemCat2=itemCatMapper.selectByPrimaryKey(goods.getCategory2Id()).getName();
+                String itemCat3=itemCatMapper.selectByPrimaryKey(goods.getCategory3Id()).getName();
+            data.put("itemCat1",itemCat1);
+            data.put("itemCat2",itemCat2);
+            data.put("itemCat3",itemCat3);
+            }
+            //查询sku
+            Example example=new Example(Item.class);
+            Example.Criteria criteria=example.createCriteria();
+            criteria.andEqualTo("status",'1');
+            criteria.andEqualTo("goodsId",goods.getId());
+            example.orderBy("isDefault").desc();
+            List<Item> itemList = itemMapper.selectByExample(example);
+            data.put("itemList", JSON.toJSONString(itemList));
+            return data;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

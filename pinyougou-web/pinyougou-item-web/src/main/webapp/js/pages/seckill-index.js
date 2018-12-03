@@ -21,7 +21,7 @@ $(function () {
 //                 + "</div>"
 //                 + "<div>剩余<b class='owned'>" + list["leaved"] + "</b>件</div>"
 //                 + "</div>"
-//                 + "<a class='sui-btn btn-block btn-buy' href='seckill-item.html' target='_blank'>立即抢购</a>"
+//                 + "<a class='sui-btn btn-block btn-buy' href='seckill-item.ftl' target='_blank'>立即抢购</a>"
 //                 + "</li >"
 //             );
             

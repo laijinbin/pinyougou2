@@ -4,25 +4,23 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>品优购搜索</title>
+		<base href="/"/>
 		<link rel="icon" href="assets/img/favicon.ico"/>
 		<link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/pages-list.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/widget-cartPanelView.css"/>
-
 		<script src="/plugins/angularjs/angular.min.js"></script>
-
 		<script src="/js/base.js"></script>
 		<script src="/js/service/baseService.js"></script>
 		<script src="/js/controller/searchController.js"></script>
-		<base href="/"/>
-		<script type="javascript">
+		<script type="text/javascript">
 			app.config(function ($locationProvider) {
                 $locationProvider.html5Mode(true);
             });
 		</script>
 	</head>
 
-	<body ng-app="pinyougou" ng-controller="searchController" ng-init="getkeywords();searchParam.page=1;search();">
+	<body ng-app="pinyougou" ng-controller="searchController" ng-init="getkeywords();">
 		<!-- 头部栏位 -->
 		<!--页面顶部-->
 		<div id="nav-bottom">
@@ -147,10 +145,11 @@
 	<div class="main">
 		<div class="py-container">
 			<!--bread-->
-			<div class="bread" ng-if="searchParam.keywords!=''">
+			<div class="bread">
 				<ul class="fl sui-breadcrumb">
 					<li >
-						<a href="#">搜索条件</a>
+						按"<span style="color: red;">{{keyword}}</span>"关键字，搜索到 <b>{{resultMap.total}}</b>条记录.
+
 					</li>
 				</ul>
 				<ul class="tags-choose">
@@ -312,7 +311,8 @@
 						<li class="yui3-u-1-5" ng-repeat="r in resultMap.rows">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="{{r.image}}" />
+									<a href="http://item.pinyougou.com/{{r.goodsId}}.html">
+										<img src="{{r.image}}" /></a>
 								</div>
 								<div class="price">
 									<strong>
