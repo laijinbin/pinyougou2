@@ -6,10 +6,19 @@ import com.pinyougou.pojo.*;
 import com.pinyougou.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.target.LazyInitTargetSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import java.util.List;
 
 
@@ -27,6 +36,21 @@ public class GoodsController {
 
     @Reference(timeout = 10000)
     private SpecificationOptionService specificationOptionService;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
+    private Destination solrQueue;
+
+    @Autowired
+    private Destination sqlrDeleteQueue;
+
+    @Autowired
+    private Destination pageTopic;
+
+    @Autowired
+    private Destination pageDeleteTopic;
 
     @PostMapping("/save")
     public boolean save(@RequestBody Goods goods){
@@ -81,6 +105,34 @@ public class GoodsController {
     public boolean updateMarketable(Long[] ids,String marketable){
         try {
             goodsService.updateMarketable(ids,marketable);
+            if ("1".equals(marketable)){
+                jmsTemplate.send(solrQueue, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createObjectMessage(ids);
+                    }
+                });
+                //发布主题
+                jmsTemplate.send(pageTopic, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createObjectMessage(ids);
+                    }
+                });
+            }else if ("0".equals(marketable)){
+                jmsTemplate.send(sqlrDeleteQueue, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createObjectMessage(ids);
+                    }
+                });
+                jmsTemplate.send(pageDeleteTopic, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createObjectMessage(ids);
+                    }
+                });
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();

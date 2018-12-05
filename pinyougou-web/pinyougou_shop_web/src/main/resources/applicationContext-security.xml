@@ -34,7 +34,7 @@
     </security:authentication-manager>
 
     <dubbo:application name="pinyougou_shop_web"></dubbo:application>
-    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
     <dubbo:reference interface="com.pinyougou.service.SellerService" id="sellerService"></dubbo:reference>
     <bean id="userDetailsService" class="com.pinyougou.shop.service.UserDetailsServiceImpl">
         <property name="sellerService" ref="sellerService"></property>

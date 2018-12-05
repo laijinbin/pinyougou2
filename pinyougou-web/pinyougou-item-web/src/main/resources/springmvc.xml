@@ -38,7 +38,7 @@
     </bean>
 
     <dubbo:application name="pinyougou-item-web"></dubbo:application>
-    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
-    <dubbo:annotation package="com.pinyougou.item.controller"></dubbo:annotation>
+    <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
+    <dubbo:annotation package="com.pinyougou.item"></dubbo:annotation>
     <!--<dubbo:reference id="brandService" interface="com.pinyougou.service.BrandService"></dubbo:reference>-->
 </beans>

@@ -9,7 +9,7 @@
     <!--导入数据访问配置文件-->
     <!--配置duboo服务提供者-->
     <dubbo:application name="pinyougou-search-service"></dubbo:application>
-    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
     <dubbo:protocol name="dubbo" port="20882"></dubbo:protocol>
     <dubbo:annotation package="com.pinyougou.search.service.impl"></dubbo:annotation>
     <!--<dubbo:service interface="com.pinyougou.service.BrandService" ref="brandService"></dubbo:service>-->

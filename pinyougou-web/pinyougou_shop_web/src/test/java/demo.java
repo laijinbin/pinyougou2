@@ -49,9 +49,9 @@ public class demo {
         /** 创建存储客户端对象 */
         StorageClient storageClient = new StorageClient();
         /** 下载文件 */
-        byte[] data = storageClient.download_file("group1", "M00/00/00/wKgMgFlIkk2AHfnLAABonuLw4M4075.jpg");
+        byte[] data = storageClient.download_file("group1", "M00/00/00/rBLxY1wHUwCADfXFAAPof74XtPw093.jpg");
         System.out.println(data.length);
-        FileOutputStream fos = new FileOutputStream(new File("F:/workspace/java/fastdfs-test/src/test/resources/1.jpg"));
+        FileOutputStream fos = new FileOutputStream(new File("C:\\Users\\Administrator\\Desktop\\1.jpg"));
         fos.write(data);
         fos.flush();
         fos.close();

@@ -1,9 +1,11 @@
 package com.pinyougou.search.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
 import com.pinyougou.service.ItemSearchService;
 import com.pinyougou.solr.SolrItem;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -143,4 +145,29 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             return map;
 
     }
+
+    @Override
+    public void saveOrUpdate(List<SolrItem> solrItems) {
+        UpdateResponse updateResponse = solrTemplate.saveBeans(solrItems);
+        if (updateResponse.getStatus()==0){
+            solrTemplate.commit();
+        }else{
+            solrTemplate.rollback();
+        }
+    }
+
+    @Override
+    public void delete(List<Long> longs) {
+        Query query=new SimpleQuery();
+        Criteria criteria=new Criteria("goodsId").in(longs);
+        query.addCriteria(criteria);
+        UpdateResponse delete = solrTemplate.delete(query);
+        if (delete.getStatus()==0){
+            solrTemplate.commit();
+        }else{
+            solrTemplate.rollback();
+        }
+    }
+
+
 }

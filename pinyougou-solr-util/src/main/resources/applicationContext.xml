@@ -8,7 +8,7 @@
     <context:property-placeholder location="classpath*:props/*.properties"></context:property-placeholder>
     <import resource="classpath:applicationContext-mapper.xml"></import>
     <context:component-scan base-package="com.pinyougou.solr.util"></context:component-scan>
-    <solr:solr-server id="solrServer" url="http://192.168.186.128:8088/solr/collection1"></solr:solr-server>
+    <solr:solr-server id="solrServer" url="http://119.23.190.210:8088/solr/collection1"></solr:solr-server>
     <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
         <constructor-arg name="solrServer" ref="solrServer"></constructor-arg>
     </bean>

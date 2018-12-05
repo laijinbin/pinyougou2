@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service(interfaceName = "com.pinyougou.service.GoodsService")
@@ -151,7 +148,7 @@ public class GoodsServiceImpl implements GoodsService {
             data = new HashMap<>();
             Goods goods=goodsMapper.selectByPrimaryKey(goodsId);
             data.put("goods",goods);
-            GoodsDesc goodsDesc=goodsDescMapper.selectByPrimaryKey(goods.getId());
+            GoodsDesc goodsDesc=goodsDescMapper.selectByPrimaryKey(goodsId);
             data.put("goodsDesc",goodsDesc);
             if (goods!=null && goods.getCategory3Id()!=null){
                 String itemCat1=itemCatMapper.selectByPrimaryKey(goods.getCategory1Id()).getName();
@@ -165,7 +162,7 @@ public class GoodsServiceImpl implements GoodsService {
             Example example=new Example(Item.class);
             Example.Criteria criteria=example.createCriteria();
             criteria.andEqualTo("status",'1');
-            criteria.andEqualTo("goodsId",goods.getId());
+            criteria.andEqualTo("goodsId",goodsId);
             example.orderBy("isDefault").desc();
             List<Item> itemList = itemMapper.selectByExample(example);
             data.put("itemList", JSON.toJSONString(itemList));
@@ -174,6 +171,23 @@ public class GoodsServiceImpl implements GoodsService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Item> findItemByGoodsId(Long[] ids) {
+        try{
+            /** 创建示范对象 */
+            Example example = new Example(Item.class);
+            /** 创建查询条件对象 */
+            Example.Criteria criteria = example.createCriteria();
+            /** 添加in查询条件 */
+            criteria.andIn("goodsId", Arrays.asList(ids));
+            /** 查询数据 */
+            return itemMapper.selectByExample(example);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+
     }
 
     private void setItemInfo(Item item, Goods goods){

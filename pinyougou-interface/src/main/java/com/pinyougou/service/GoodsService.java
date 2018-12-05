@@ -2,7 +2,9 @@ package com.pinyougou.service;
 
 import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Goods;
+import com.pinyougou.pojo.Item;
 
+import java.util.List;
 import java.util.Map;
 
 public interface GoodsService {
@@ -17,4 +19,6 @@ public interface GoodsService {
     void updateMarketable(Long[] ids, String marketable);
 
     Map<String,Object> getGoods(Long goodsId);
+
+    List<Item> findItemByGoodsId(Long[] ids);
 }

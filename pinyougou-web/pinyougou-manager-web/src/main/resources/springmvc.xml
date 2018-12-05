@@ -31,7 +31,7 @@
         <!-- 配置静态资源用WEB容器默认的servlet来处理 -->
 <mvc:default-servlet-handler/>
     <dubbo:application name="pinyougou-manager-web"></dubbo:application>
-    <dubbo:registry protocol="zookeeper" address="192.168.186.128:2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
     <dubbo:annotation package="com.pinyougou.manager.controller"></dubbo:annotation>
     <!--<dubbo:reference id="brandService" interface="com.pinyougou.service.BrandService"></dubbo:reference>-->
 </beans>
