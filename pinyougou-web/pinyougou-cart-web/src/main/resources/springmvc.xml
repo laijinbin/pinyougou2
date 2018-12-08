@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+        <mvc:annotation-driven>
+            <mvc:message-converters>
+        <!-- 配置用fastjson作为json处理框架 -->
+        <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+            <!-- 配置支持的类型 -->
+            <property name="supportedMediaTypes"
+                      value="application/json;charset=UTF-8"/>
+        </bean>
+    </mvc:message-converters>
+</mvc:annotation-driven>
+        <!-- 配置静态资源用WEB容器默认的servlet来处理 -->
+<mvc:default-servlet-handler/>
+    <dubbo:application name="pinyougou-cart-web"></dubbo:application>
+    <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
+    <dubbo:annotation package="com.pinyougou.cart.controller"></dubbo:annotation>
+    <!--<dubbo:reference id="brandService" interface="com.pinyougou.service.BrandService"></dubbo:reference>-->
+</beans>

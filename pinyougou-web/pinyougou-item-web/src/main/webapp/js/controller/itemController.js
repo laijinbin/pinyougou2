@@ -1,4 +1,6 @@
-app.controller('itemController',function ($scope){
+app.controller('itemController',function ($scope,$controller){
+
+    $controller('baseController',{$scope:$scope});
     $scope.specItems = {};
 
     $scope.addNum=function (num) {

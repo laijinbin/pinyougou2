@@ -1,6 +1,7 @@
 /** 定义搜索控制器 */
-app.controller("searchController" ,function ($scope,$sce,$location,baseService) {
+app.controller("searchController" ,function ($scope,$sce,$location,$controller,baseService) {
 
+    $controller("baseController", {$scope:$scope});
     $scope.searchParam = {keywords : '', category : '',
         brand : '', price : '', spec : {},page:1,rows:20,sortField : '', sort : ''};
 
@@ -9,7 +10,6 @@ app.controller("searchController" ,function ($scope,$sce,$location,baseService) 
       baseService.sendPost("/Search",$scope.searchParam)
           .then(function (value) {
               $scope.resultMap = value.data;
-              alert(JSON.stringify($scope.resultMap));
               $scope.keyword=$scope.searchParam.keywords;
           });
       $scope.initPageNum();

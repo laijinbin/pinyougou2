@@ -10,6 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="css/widget-cartPanelView.css"/>
     <script src="/plugins/angularjs/angular.min.js"></script>
     <script src="/js/base.js"></script>
+    <script src="/js/service/baseService.js"></script>
+    <script src="/js/controller/baseController.js"></script>
     <script src="/js/controller/itemController.js"></script>
     <script type="text/javascript">
         /** 定义SKU商品数据 */
@@ -21,7 +23,7 @@
 
 <body ng-app="pinyougou"
       ng-controller="itemController"
-      ng-init="num=1;loadSku();">
+      ng-init="num=1;loadSku();loadUsername();">
 <#include "header.ftl"/>
 
 	<div class="py-container">
