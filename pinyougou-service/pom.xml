@@ -17,6 +17,7 @@
         <module>pinyougou-user-service</module>
         <module>pinyougou-cart-service</module>
         <module>pinyougou-order-service</module>
+        <module>pinyougou-pay-service</module>
     </modules>
     <artifactId>pinyougou-service</artifactId>
     <properties>
