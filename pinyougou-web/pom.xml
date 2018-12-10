@@ -18,6 +18,7 @@
         <module>pinyougou-sms-web</module>
         <module>pinyougou-user-web</module>
         <module>pinyougou-cart-web</module>
+        <module>pinyougou-seckill-web</module>
 
     </modules>
     <artifactId>pinyougou-web</artifactId>
