@@ -28,6 +28,10 @@ public class WeixinPayServiceImpl implements WeixinPayService {
     /** 订单查询请求地址 */
     @Value("${orderquery}")
     private String orderquery;
+    /** 关闭订单请求地址 */
+    @Value("${closeorder}")
+    private String closeorder;
+
     @Override
     public Map<String, String> genPayCode(String l, String s) {
         Map<String,String> map=new HashMap<>();
@@ -96,5 +100,34 @@ public class WeixinPayServiceImpl implements WeixinPayService {
             throw new RuntimeException(e);
 
         }
+    }
+
+    @Override
+    public Map<String, String> closePayTimeout(String outTradeNo) {
+        /** 创建Map集合封装请求参数 */
+        Map<String, String> params = new HashMap<>();
+        /** 公众账号 */
+        params.put("appid", appid);
+        /** 商户账号 */
+        params.put("mch_id", partner);
+        /** 订单交易号 */
+        params.put("out_trade_no", outTradeNo);
+        /** 随机字符串 */
+        params.put("nonce_str", WXPayUtil.generateNonceStr());
+        try {
+            /** 生成签名的xml参数 */
+            String xmlParam = WXPayUtil.generateSignedXml(params, partnerkey);
+            System.out.println("请求参数：" + xmlParam);
+            /** 创建HttpClientUtils对象 */
+            HttpClientUtils client = new HttpClientUtils(true);
+            /** 发送post请求，得到响应数据 */
+            String result = client.sendPost(closeorder, xmlParam);
+            System.out.println("响应数据：" + result);
+            /** 将xml响应数据转化成Map */
+            return WXPayUtil.xmlToMap(result);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
     }
 }

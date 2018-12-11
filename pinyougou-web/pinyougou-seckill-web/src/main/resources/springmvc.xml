@@ -1,17 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://code.alibabatech.com/schema/dubbo
-        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+<!--开启任务注解驱动-->
+    <task:annotation-driven/>
+    <!--配置任务调度-->
+    <task:scheduler id="scheduler"></task:scheduler>
+
         <mvc:annotation-driven>
             <mvc:message-converters>
         <!-- 配置用fastjson作为json处理框架 -->
@@ -26,6 +32,6 @@
 <mvc:default-servlet-handler/>
     <dubbo:application name="pinyougou-seckill-web"></dubbo:application>
     <dubbo:registry protocol="zookeeper" address="119.23.190.210:2181"></dubbo:registry>
-    <dubbo:annotation package="com.pinyougou.seckill.controller"></dubbo:annotation>
+    <dubbo:annotation package="com.pinyougou.seckill"></dubbo:annotation>
     <!--<dubbo:reference id="brandService" interface="com.pinyougou.service.BrandService"></dubbo:reference>-->
 </beans>

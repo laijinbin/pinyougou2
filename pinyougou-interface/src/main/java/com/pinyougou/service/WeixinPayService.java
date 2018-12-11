@@ -6,4 +6,6 @@ public interface WeixinPayService {
     Map<String,String> genPayCode(String l, String s);
 
     Map<String,String> queryPayStatus(String outTradeNo);
+
+    Map<String,String> closePayTimeout(String outTradeNo);
 }
