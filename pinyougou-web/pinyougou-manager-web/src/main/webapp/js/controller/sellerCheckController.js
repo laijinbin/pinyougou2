@@ -1,6 +1,8 @@
 app.controller("sellerCheckController", function ($scope,$controller, baseService) {
     $controller('baseController', {$scope: $scope});
 
+    $scope.str=['未审核','已审核','审核未通过','关闭'];
+
     $scope.search=function (page,rows) {
         baseService.findByPage("/seller/findByPage",page,rows,$scope.searchEntity)
             .then(function (value) {

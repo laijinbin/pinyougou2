@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pinyougou.mapper.UserMapper">
+    <update id="savePwd">
+        UPDATE tb_user SET password=#{newPwd} where username=#{userId}
+    </update>
+    <update id="updatePhone">
+        UPDATE tb_user SET phone=#{newPhone} where username=#{userId}
+    </update>
+    <select id="getPwdByUserId" resultType="java.lang.String">
+        select password from tb_user where username=#{userId};
+    </select>
 </mapper>

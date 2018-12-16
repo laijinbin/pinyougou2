@@ -4,13 +4,25 @@
     <meta charset="UTF-8"/>
     <title>设置-个人信息</title>
     <link rel="icon" href="/assets/img/favicon.ico"/>
-
+	<base href="/">
     <link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
     
 	<link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css"/>
 
+	<script src="/plugins/angularjs/angular.min.js"></script>
+	<script src="/js/base.js"></script>
+	<script src="/js/service/baseService.js"></script>
+	<script src="/js/controller/indexController.js"></script>
+	<script src="/js/controller/userController.js"></script>
+	<script type="text/javascript">
+        app.config(function ($locationProvider) {
+            $locationProvider.html5Mode(true);
+        });
+	</script>
+
 </head>
-<body>
+<body ng-app="pinyougou" ng-controller="userController"
+	  ng-init="showName();findAddress();">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -20,8 +32,13 @@
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+						<li class="f-item">{{loginName}}品优购欢迎您！
+							<a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+						</li>
+						<li class="f-item" ng-if="!loginName">请
+							<a href="http://sso.pinyougou.com/?service={{redirectUrl}}">登录</a>
+							<a href="http://user.pinyougou.com/register.html">免费注册</a>
+						</li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -163,7 +180,7 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
+                            <span class="name">{{loginName}}</span>
                             <span class="safe">账户安全</span>
                         </div>
                         <div class="clearfix"></div>
@@ -198,7 +215,7 @@ $(function(){
                     <div class="body userAddress">
                         <div class="address-title">
                             <span class="title">地址管理</span>
-                            <a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new">添加新地址</a>
+                            <a data-toggle="modal" data-target=".edit" ng-click="address={};" data-keyboard="false"   class="sui-btn  btn-info add-new">添加新地址</a>
                             <span class="clearfix"></span>
                         </div>
                         <div class="address-detail">
@@ -212,29 +229,19 @@ $(function(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                    <tr ng-repeat="address in addressList">
+                                        <td>{{address.contact}}</td>
+                                        <td>{{address.provinceId}} {{address.cityId}} {{address.townId}} {{address.address}}</td>
+                                        <td>{{address.mobile}}</td>
                                         <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+											<a href="#" data-toggle="modal" data-target=".edit" ng-click="show(address);">编辑</a>
+                                            <a href="#" ng-click="deleteAddress(address);">删除</a>
+                                            <div ng-if="address.isDefault==1">默认地址</div>
+                                            <a href="#" ng-click="setDefault(address.id)" ng-if="address.isDefault==0">设为默认</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
-                                        </td>
-                                    </tr>
-                                    
                                 </tbody>
-                            </table>                          
+                            </table>
                         </div>
                         <!--新增地址弹出层-->
                          <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit" style="width:580px;">
@@ -242,14 +249,14 @@ $(function(){
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
-                                        <h4 id="myModalLabel" class="modal-title">新增地址</h4>
+                                        <h4 id="myModalLabel" class="modal-title">地址编辑</h4>
                                     </div>
                                     <div class="modal-body">
                                         <form action="" class="sui-form form-horizontal">
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="address.contact">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -271,37 +278,35 @@ $(function(){
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-large">
+                                                <input type="text" class="input-large" ng-model="address.address">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">联系电话：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="address.mobile">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">邮箱：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="address.notes">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">地址别名：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="address.alias">
                                             </div>
                                             <div class="othername">
                                                 建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
                                             </div>
                                         </div>
-                                        
                                         </form>
-                                        
-                                        
+										{{address}}
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+                                        <button type="button" ng-click="saveOrUpdate();" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
                                         <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
                                     </div>
                                 </div>

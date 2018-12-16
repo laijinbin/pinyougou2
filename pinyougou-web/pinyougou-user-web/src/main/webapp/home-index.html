@@ -22,9 +22,13 @@
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">{{loginName}}品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span>
-						<a href="http://user.pinyougou.com/register.html">免费注册</a></span></li>
+						<li class="f-item">{{loginName}}品优购欢迎您！
+                            <a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+                        </li>
+						<li class="f-item" ng-if="!loginName">请
+                            <a href="http://sso.pinyougou.com/?service={{redirectUrl}}">登录</a>
+                            <a href="http://user.pinyougou.com/register.html">免费注册</a>
+                        </li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -180,7 +184,7 @@ $(function(){
 						<dl>
 							<dt><i>·</i> 设置</dt>
 							<dd><a href="home-setting-info.html">个人信息</a></dd>
-							<dd><a href="home-setting-address.html"  >地址管理</a></dd>
+							<dd><a href="home-setting-address.html">地址管理</a></dd>
 							<dd><a href="home-setting-safe.html" >安全管理</a></dd>
 						</dl>
                     </div>
@@ -218,7 +222,8 @@ $(function(){
 								<!--order1-->
                                 <div class="choose-title">
                                     <label data-toggle="checkbox" class="checkbox-pretty ">
-                                           <input type="checkbox" checked="checked"><span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
+                                           <input type="checkbox" checked="checked">
+                                        <span>2017-02-11 11:59　订单编号：7867473872181848  店铺：哇哈哈 <a>和我联系</a></span>
                                      </label>
 									  <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>

@@ -1,8 +1,9 @@
-app.controller("brandController", function ($scope,$controller, baseService) {
-    $controller('baseController',{$scope:$scope});
+app.controller("brandController", function ($scope, $controller, baseService) {
+    $controller('baseController', {$scope: $scope});
+
     $scope.findAll = function () {
         $http.get("/brand/findAll").then(function (value) {
-            $scope.brandList = value.data;
+            $scope.dataList = value.data;
         }, function (reason) {
             alert("加载数据失败")
         });
@@ -30,9 +31,13 @@ app.controller("brandController", function ($scope,$controller, baseService) {
     $scope.search = function (page, rows) {
         baseService.findByPage("/brand/findByPage", page, rows, $scope.searchEntity)
             .then(function (value) {
-                $scope.brandList = value.data.list;
+                $scope.dataList = value.data.list;
                 $scope.paginationConf.totalItems = value.data.total;
             });
+        $scope.ids = [];
+        $scope.checkedArr = [];
+        $scope.ckAll = false;
+
     };
 
     $scope.delete = function () {
@@ -51,4 +56,8 @@ app.controller("brandController", function ($scope,$controller, baseService) {
             alert("请选择要删除的品牌")
         }
     };
+
+
+
+
 });

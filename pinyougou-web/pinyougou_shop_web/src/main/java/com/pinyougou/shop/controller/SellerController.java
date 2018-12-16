@@ -6,6 +6,8 @@ import com.pinyougou.service.SellerService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/seller")
 public class SellerController {
@@ -24,6 +26,25 @@ public class SellerController {
             e.printStackTrace();
         }
         return false;
+    }
+    @GetMapping("/findSeller")
+    public Seller findSeller(String sellerId){
+       return sellerService.findOne(sellerId);
+    }
+
+    @PostMapping("/updateSeller")
+    public boolean updateSeller(@RequestBody Seller seller){
+        try {
+            sellerService.updateSeller(seller);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @PostMapping("/alertPwd")
+    public Map<String,Object> alertPwd(String sellerId,@RequestBody Map<String,String> pwd){
+        return sellerService.alertPwd(sellerId,pwd.get("oldPwd"),pwd.get("newPwd"));
     }
 }
 

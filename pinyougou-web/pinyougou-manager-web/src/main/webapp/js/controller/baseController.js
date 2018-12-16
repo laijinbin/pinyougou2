@@ -1,5 +1,7 @@
 app.controller('baseController',function($scope){
     $scope.ids = [];
+    $scope.checkedArr = [];
+
     $scope.paginationConf = {
         currentPage: 1,//当前页
         totalItems: 0,//总记录数
@@ -15,12 +17,26 @@ app.controller('baseController',function($scope){
             $scope.paginationConf.itemsPerPage);
     };
 
-    $scope.updateSelection= function ($event,id) {
+    $scope.updateSelection= function ($event,id,i) {
         if ($event.target.checked) {
             $scope.ids.push(id);
         } else {
             var num = $scope.ids.indexOf(id);
             $scope.ids.splice(num, 1);
         }
+        // 重新赋值，再次绑定checkbox
+        $scope.checkedArr[i] = $event.target.checked;
+        // 让全选是否选中,再次绑定checkbox
+        $scope.ckAll = $scope.dataList.length == $scope.ids.length;
+    };
+    $scope.checkAll = function ($event) {
+        $scope.ids = [];
+        for (var i = 0; i < $scope.dataList.length; i++) {
+            $scope.checkedArr[i]=$event.target.checked;
+            if ($event.target.checked){
+                $scope.ids.push($scope.dataList[i].id);
+            }
+        }
+        $scope.ckAll=$scope.dataList.length == $scope.ids.length;
     };
 });

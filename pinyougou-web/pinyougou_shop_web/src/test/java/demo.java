@@ -13,7 +13,7 @@ public class demo {
     public void test(){
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
         String p=bCryptPasswordEncoder.encode("123456");
-        System.out.println(p);
+        System.out.println(bCryptPasswordEncoder.matches("123456","$2a$10$j72D4rR/zEvUA5osJVeHyeDFK96362svbfTZvylT2QFzTSh4XgTlC"));
     }
     /** 上传文件 */
     @Test

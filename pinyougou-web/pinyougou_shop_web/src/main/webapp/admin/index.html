@@ -310,12 +310,12 @@ ng-init="findLoginName()">
 				        <ul class="treeview-menu">
 				
 				            <li id="admin-login">
-				                <a href="seller.html" target="iframe">
+				                <a href="seller.html?sellerId={{loginUser.loginName}}" target="iframe">
 				                    <i class="fa fa-circle-o"></i> 修改资料
 				                </a>
 				            </li>
 							<li id="admin-login">
-				                <a href="password.html" target="iframe">
+				                <a href="password.html?sellerId={{loginUser.loginName}}" target="iframe">
 				                    <i class="fa fa-circle-o"></i> 修改密码
 				                </a>
 				            </li>
