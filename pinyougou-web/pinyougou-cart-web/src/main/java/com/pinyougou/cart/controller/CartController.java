@@ -10,6 +10,7 @@ import com.pinyougou.service.CartService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,8 @@ public class CartController {
 
 
     @GetMapping("/addCart")
+    @CrossOrigin(origins = {"http://item.pinyougou.com"},
+            allowCredentials = "true")
     public boolean addCart(Long itemId, Integer num){
         try {
             String userName = request.getRemoteUser();

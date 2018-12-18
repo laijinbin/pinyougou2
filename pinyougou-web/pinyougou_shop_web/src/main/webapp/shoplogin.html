@@ -36,7 +36,7 @@
 								<img src="/img/wx_cz.jpg" />
 							</div>
 							<div id="profile" class="tab-pane  active">
-								<form class="sui-form" action="/login" method="post" id="showLogin">
+								<form class="sui-form" action="/user/login" method="post" id="showLogin">
 									<div class="input-prepend">
 										<span class="add-on loginname"></span>
 										<input id="prependedInput" type="text"  name="username"
@@ -46,6 +46,12 @@
 										<span class="add-on loginpwd"></span>
 										<input id="prependedInput" type="password" name="password"
 											placeholder="请输入密码" class="span2 input-xfat"/>
+									</div>
+									<div class="setting">
+										<input type="text"  name="code"
+											   placeholder="请输入验证码" size="2" style="height: 31px;width: 250px;"/>
+										<span><img src="/manager/checkCode" align="right" style="width: 80px;height: 37px"
+										        id="code" onclick="getCode();" ></span>
 									</div>
 									<div class="setting">
 										<label class="checkbox inline">
@@ -105,6 +111,11 @@
 	<script src="/js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 		
 	<script src="/js/pages/shoplogin.js"></script>
+	<script type="text/javascript">
+		function getCode() {
+            document.getElementById("code").src = "/manager/checkCode?id=" + new Date().getTime();
+        }
+	</script>
 	
 </body>
 </html>

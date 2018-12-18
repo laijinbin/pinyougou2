@@ -19,7 +19,7 @@
 </head>
 
 <body ng-app="pinyougou" ng-controller="userController"
-	  ng-init="showName();">
+	  ng-init="showName();findProvinceList();findUser();">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -133,8 +133,7 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript" src="/js/plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery-2.2.3.min.js"></script>
 
 <script type="text/javascript">
 $(function(){
@@ -190,7 +189,7 @@ $(function(){
                 <div class="yui3-u-1-6 list">
 
                     <div class="person-info">
-                        <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
+                        <div class="person-photo"><img style="width: 50px;height: 50px" src="{{user.headPic}}" alt=""></div>
                         <div class="person-account">
                             <span class="name">{{loginName}}</span>
                             <span class="safe">账户安全</span>
@@ -243,12 +242,12 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputGender" class="control-label">性别：</label>
                                         <div class="controls">
-                                            <label data-toggle="radio" class="radio-pretty inline">
+                                            <!--<label data-toggle="radio" class="radio-pretty inline">-->
                                             <input type="radio" name="gender" value="1" ng-model="user.sex"><span>男</span>
-                                        </label>
-                                            <label data-toggle="radio" class="radio-pretty inline">
+                                        <!--</label>-->
+                                            <!--<label data-toggle="radio" class="radio-pretty inline">-->
                                             <input type="radio" name="gender" value="2" ng-model="user.sex"><span>女</span>
-                                        </label>
+                                        <!--</label>-->
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -268,15 +267,21 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputPassword" class="control-label">所在地：</label>
                                         <div class="controls">
-                                            <div data-toggle="distpicker">
+                                            <div data-toggle="distpicker2">
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
+                                                    <select ng-model="user.address.provinceId">
+														<option ng-repeat="p in provinceList" value="{{p.provinceId}}">{{p.province}}</option>
+													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="city1"></select>
+													<select ng-model="user.address.cityId" >
+														<option ng-repeat="c in cityList" value="{{c.cityId}}">{{c.city}}</option>
+													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="district1"></select>
+													<select ng-model="user.address.areaId" >
+														<option ng-repeat="a in areaList" value="{{a.areaId}}">{{a.area}}</option>
+													</select>
                                                 </div>
                                             </div>
                                         </div>
@@ -285,7 +290,7 @@ $(function(){
                                         <label for="inputJob" class="control-label">职业：</label>
                                         <div class="controls"><span class="sui-dropdown dropdown-bordered select"><span class="dropdown-inner"><a role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
                                                 <input name="job" type="hidden" data-rules="required"><i class="caret"></i><span>请选择</span></a>
-                                            <ul id="menu4" role="menu" ng-model="user." aria-labelledby="drop4" class="sui-dropdown-menu">
+                                            <ul id="menu4" role="menu"   aria-labelledby="drop4" class="sui-dropdown-menu">
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="bj">程序员</a></li>
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">产品经理</a></li>
                                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="sb">UI设计师</a></li>
@@ -297,7 +302,7 @@ $(function(){
                                     <div class="control-group">
                                         <label for="sanwei" class="control-label"></label>
                                         <div class="controls">
-                                            <button type="submit" class="sui-btn btn-primary">保存</button>
+                                            <button type="button" ng-click="updateUser()" class="sui-btn btn-primary">保存</button>
                                         </div>
                                     </div>
                                 </form>
@@ -306,10 +311,12 @@ $(function(){
 
                                 <div class="new-photo">
                                     <p>当前头像：</p>
-                                    <div class="upload">
-                                        <img id="imgShow_WU_FILE_0" width="100" height="100" src="img/_/photo_icon.png" alt="">
+                                    <div >
+                                        <img id="imgShow_WU_FILE_0" width="100" height="100" alt="">
                                         <input type="file" id="up_img_WU_FILE_0" />
-                                    </div>
+										<button type="button" ng-click="uploadFile()" class="sui-btn btn-primary">上传</button>
+                                        <img style="width:150px;height:400px" src="{{user.headPic}}" alt="">
+									</div>
 
                                 </div>
                             </div>

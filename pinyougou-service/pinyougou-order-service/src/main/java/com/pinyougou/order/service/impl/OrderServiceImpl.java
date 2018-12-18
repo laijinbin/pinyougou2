@@ -1,5 +1,11 @@
 package com.pinyougou.order.service.impl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pinyougou.common.pojo.PageResult;
+import com.pinyougou.mapper.SellerMapper;
+import com.pinyougou.pojo.OrderItem;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,10 +14,7 @@ import com.pinyougou.common.util.IdWorker;
 import com.pinyougou.mapper.OrderItemMapper;
 import com.pinyougou.mapper.OrderMapper;
 import com.pinyougou.mapper.PayLogMapper;
-import com.pinyougou.pojo.Cart;
-import com.pinyougou.pojo.Order;
-import com.pinyougou.pojo.OrderItem;
-import com.pinyougou.pojo.PayLog;
+import com.pinyougou.pojo.*;
 import com.pinyougou.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +28,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private SellerMapper sellerMapper;
 
     @Autowired
     private OrderItemMapper orderItemMapper;
@@ -136,6 +141,55 @@ public class OrderServiceImpl implements OrderService {
         }catch (Exception e){
             throw new RuntimeException(e);
 
+        }
+    }
+
+    @Override
+    public PageResult findByPage(Integer page, Integer rows,String userId) {
+        PageHelper.startPage(page,rows);
+       List<Order> orderList= orderMapper.findAllOrderByUserId(userId);
+        PageInfo<Order> pageInfo=new PageInfo<>(orderList);
+       List<AllOrder> allOrderList=new ArrayList<>();
+        for (Order order : orderList) {
+            //设置订单信息
+            AllOrder allOrder=new AllOrder();
+            allOrder.setOrderId(order.getOrderId().toString());
+            allOrder.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(order.getCreateTime()));
+            allOrder.setStatus(order.getStatus());
+            allOrder.setPayment(order.getPayment());
+            String nickName=sellerMapper.findNickNameById(order.getSellerId());
+            allOrder.setNickName(nickName);
+            List<OrderItem> orderItemList=orderItemMapper.findOrderItemByOrderId(order.getOrderId());
+            allOrder.setOrderItemList(orderItemList);
+            allOrderList.add(allOrder);
+        }
+        return new PageResult(pageInfo.getTotal(),allOrderList);
+    }
+
+    @Override
+    public void updateOrderStatus2(Long money,String userId,String outTradeNo, String transaction_id) {
+        try {
+            //更改订单信息
+            Order order=new Order();
+            order.setOrderId(Long.valueOf(outTradeNo));
+            order.setPaymentTime(new Date());
+            order.setStatus("2");
+            orderMapper.updateByPrimaryKeySelective(order);
+            //增加支付日志
+            PayLog payLog=new PayLog();
+            payLog.setOutTradeNo(outTradeNo);
+            payLog.setCreateTime(new Date());
+            payLog.setPayTime(new Date());
+            payLog.setTotalFee(money);
+            payLog.setUserId(userId);
+            payLog.setTransactionId(transaction_id);
+            payLog.setTradeState("1");
+            payLog.setOrderList(outTradeNo);
+            payLog.setPayType("1");
+            payLogMapper.insertSelective(payLog);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

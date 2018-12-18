@@ -9,17 +9,23 @@
     <security:http pattern="/img/**" security="none"></security:http>
     <security:http pattern="/js/**" security="none"></security:http>
     <security:http pattern="/plugins/**" security="none"></security:http>
+    <!--<security:http pattern="/user/login" security="none"></security:http>-->
+    <security:http pattern="/manager/checkCode" security="none"></security:http>
 
-    <security:http auto-config="true" use-expressions="true">
+    <security:http entry-point-ref="authenticationEntryPoint">
+        <security:intercept-url pattern="/user/login" access="permitAll"/>
         <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"></security:intercept-url>
-        <security:form-login
-            login-page="/login.html"
-            username-parameter="username"
-            password-parameter="password"
-            login-processing-url="/login"
-            default-target-url="/admin/index.html"
-            always-use-default-target="true"
-            authentication-failure-url="/login.html"></security:form-login>
+        <!--<security:form-login-->
+            <!--login-page="/login.html"-->
+            <!--username-parameter="username"-->
+            <!--password-parameter="password"-->
+            <!--login-processing-url="/login"-->
+            <!--default-target-url="/admin/index.html"-->
+            <!--always-use-default-target="true"-->
+            <!--authentication-failure-url="/login.html"></security:form-login>--><!--
+            配置所有登录用户或未登录用户都能访问的请求地址
+            permitAll: 会进Security的登录Filter，如果是登录用户，可以获取到登录用户名
+         -->
         <security:logout
             logout-url="/logout"
             logout-success-url="/login.html"
@@ -29,7 +35,12 @@
             <security:frame-options policy="SAMEORIGIN"/>
         </security:headers>
     </security:http>
-    <security:authentication-manager>
+    <bean id="authenticationEntryPoint"
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <!-- 配置认证处理请求地址 -->
+        <constructor-arg value="/user/login"/>
+    </bean>
+    <security:authentication-manager id="authenticationManager">
         <security:authentication-provider>
             <security:user-service>
                 <security:user name="admin" authorities="ROLE_ADMIN" password="123456"></security:user>

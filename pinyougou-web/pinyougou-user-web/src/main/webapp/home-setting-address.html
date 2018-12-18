@@ -22,7 +22,7 @@
 
 </head>
 <body ng-app="pinyougou" ng-controller="userController"
-	  ng-init="showName();findAddress();">
+	  ng-init="showName();findAddress();findUser();findProvinceList();">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -178,7 +178,7 @@ $(function(){
                 <div class="yui3-u-1-6 list">
 
                     <div class="person-info">
-                        <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
+						<div class="person-photo"><img style="width: 50px;height: 50px" src="{{user.headPic}}" alt=""></div>
                         <div class="person-account">
                             <span class="name">{{loginName}}</span>
                             <span class="safe">账户安全</span>
@@ -231,8 +231,8 @@ $(function(){
                                 <tbody>
                                     <tr ng-repeat="address in addressList">
                                         <td>{{address.contact}}</td>
-                                        <td>{{address.provinceId}} {{address.cityId}} {{address.townId}} {{address.address}}</td>
-                                        <td>{{address.mobile}}</td>
+                                        <td>{{address.provinceName}} {{address.cityName}} {{address.areaName}} {{address.address}}</td>
+                                        <td>{{address.hiddenPhone}}</td>
                                         <td>
 											<a href="#" data-toggle="modal" data-target=".edit" ng-click="show(address);">编辑</a>
                                             <a href="#" ng-click="deleteAddress(address);">删除</a>
@@ -259,22 +259,44 @@ $(function(){
                                                 <input type="text" class="input-medium" ng-model="address.contact">
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="control-label">所在地区：</label>
-                                            <div class="controls">
-                                                <div data-toggle="distpicker">
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
-                                                </div>
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="city1"></select>
-                                                </div>
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="district1"></select>
-                                                </div>
-                                            </div>
-                                            </div>									 
-                                        </div>
+                                        <!--<div class="control-group">-->
+                                            <!--<label class="control-label">所在地区：</label>-->
+                                            <!--<div class="controls">-->
+                                                <!--<div data-toggle="distpicker">-->
+                                                <!--<div class="form-group area">-->
+                                                    <!--<select class="form-control" id="province1"></select>-->
+                                                <!--</div>-->
+                                                <!--<div class="form-group area">-->
+                                                    <!--<select class="form-control" id="city1"></select>-->
+                                                <!--</div>-->
+                                                <!--<div class="form-group area">-->
+                                                    <!--<select class="form-control" id="district1"></select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--</div>									 -->
+                                        <!--</div>-->
+											<div class="control-group">
+												<label for="inputPassword" class="control-label">所在地：</label>
+												<div class="controls">
+													<div data-toggle="distpicker2">
+														<div class="form-group area">
+															<select ng-model="address.provinceId">
+																<option ng-repeat="p in provinceList" value="{{p.provinceId}}">{{p.province}}</option>
+															</select>
+														</div>
+														<div class="form-group area">
+															<select ng-model="address.cityId" >
+																<option ng-repeat="c in cityList" value="{{c.cityId}}">{{c.city}}</option>
+															</select>
+														</div>
+														<div class="form-group area">
+															<select ng-model="address.townId" >
+																<option ng-repeat="a in areaList" value="{{a.areaId}}">{{a.area}}</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
@@ -299,7 +321,9 @@ $(function(){
                                                 <input type="text" class="input-medium" ng-model="address.alias">
                                             </div>
                                             <div class="othername">
-                                                建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
+                                                建议填写常用地址：<a href="#" class="sui-btn btn-default" ng-click="setAddressAlias('家里')">家里</a>
+												　<a href="#" class="sui-btn btn-default" ng-click="setAddressAlias('父母家')">父母家</a>　
+												<a href="#" class="sui-btn btn-default" ng-click="setAddressAlias('公司')">公司</a>
                                             </div>
                                         </div>
                                         </form>

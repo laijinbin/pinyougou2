@@ -13,4 +13,6 @@ public interface SellerMapper extends Mapper<Seller> {
 
 
     void alertPwd(@Param("sellerId") String sellerId, @Param("bcPwd") String bcPwd);
+
+    String findNickNameById(String sellerId);
 }

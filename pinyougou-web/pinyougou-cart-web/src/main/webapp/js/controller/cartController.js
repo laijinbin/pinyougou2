@@ -28,6 +28,4 @@ app.controller('cartController',function ($scope,$controller,baseService) {
 
             });
     };
-
-
 });

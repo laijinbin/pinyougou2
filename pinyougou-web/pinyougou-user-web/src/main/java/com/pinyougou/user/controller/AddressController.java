@@ -2,6 +2,9 @@ package com.pinyougou.user.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.Address;
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.service.AddressService;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +69,18 @@ public class AddressController {
             e.printStackTrace();
         }
         return false;
+    }
+    @GetMapping("/findProvinceList")
+    public List<Provinces> findProvinceList(){
+        return addressService.findProvinceList();
+    }
+    @GetMapping("/findCity")
+    public List<Cities> findCity(String provinceId){
+        return addressService.findCity(provinceId);
+    }
+    @GetMapping("/findArea")
+    public List<Areas> findArea(String cityId){
+        return addressService.findArea(cityId);
     }
 
 }

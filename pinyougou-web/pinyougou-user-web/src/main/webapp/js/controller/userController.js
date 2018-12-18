@@ -1,9 +1,10 @@
 /** 定义控制器层 */
-app.controller('userController', function ($scope, $controller, $http, $location, baseService) {
+app.controller('userController', function ($scope,$filter, $controller, $http, $location, baseService) {
     $controller('indexController', {$scope: $scope});
     $scope.address = {};
-    $scope.user={};
-    $scope.newPhone='';
+    $scope.user = {};
+    $scope.user = {address: {provinceId: '', cityId: '', areaId: ''}};
+    $scope.newPhone = '';
     $scope.save = function () {
         if ($scope.password != $scope.password) {
             alert("2次输入的密码不一致");
@@ -22,9 +23,9 @@ app.controller('userController', function ($scope, $controller, $http, $location
             });
     };
     $scope.sendCode = function () {
-        if ($scope.newPhone){
+        if ($scope.newPhone) {
             alert($scope.newPhone);
-            $scope.user.phone=$scope.newPhone;
+            $scope.user.phone = $scope.newPhone;
         }
         if ($scope.user.phone) {
             baseService.sendGet("/user/sendCode?phone="
@@ -41,6 +42,9 @@ app.controller('userController', function ($scope, $controller, $http, $location
         baseService.sendGet("/address/findAddress")
             .then(function (value) {
                 $scope.addressList = value.data;
+                for (var i=0;i<value.data.length;i++){
+                    $scope.addressList[i].hiddenPhone=value.data[i].mobile.substr(0,3)+"****"+value.data[i].mobile.substr(7);
+                }
 
             });
     };
@@ -115,7 +119,7 @@ app.controller('userController', function ($scope, $controller, $http, $location
         baseService.sendGet("/user/findUserById")
             .then(function (value) {
                 $scope.user = value.data;
-                $scope.user.phone=value.data.phone;
+                $scope.user.phone = value.data.phone;
                 $scope.phone = value.data.phone.substr(0, 3) + "****" + value.data.phone.substr(7);
             });
     };
@@ -124,16 +128,16 @@ app.controller('userController', function ($scope, $controller, $http, $location
     };
 
     $scope.goNewPhone = function (step) {
-        if ($scope.newPhone){
+        if ($scope.newPhone) {
             alert($scope.newPhone);
-            $scope.user.phone=$scope.newPhone;
+            $scope.user.phone = $scope.newPhone;
         }
         $http.post("/user/goNewPhone",
-            {"phone": $scope.user.phone, "code": $scope.code, "msgcode": $scope.msgcode,"step":step})
+            {"phone": $scope.user.phone, "code": $scope.code, "msgcode": $scope.msgcode, "step": step})
             .then(function (value) {
                 if (value.data.flag) {
                     $scope.code = '';
-                    $scope.phone='';
+                    $scope.phone = '';
                     $scope.msgcode = '';
                     if (step == '1') {
                         location.href = "/home-setting-address-phone.html";
@@ -145,6 +149,75 @@ app.controller('userController', function ($scope, $controller, $http, $location
                     alert(value.data.msg);
                 }
             });
+    };
+    $scope.findProvinceList = function () {
+        baseService.sendGet("/address/findProvinceList")
+            .then(function (value) {
+                $scope.provinceList = value.data;
+            });
+    };
+    $scope.$watch('user.address.provinceId', function (newValue, oldValue) {
+        if (newValue) {
+            baseService.sendGet("/address/findCity?provinceId=" + newValue)
+                .then(function (value) {
+                    $scope.cityList = value.data;
+                });
+        }
+    });
+    $scope.$watch('user.address.cityId', function (newValue, oldValue) {
+        if (newValue) {
+            baseService.sendGet("/address/findArea?cityId=" + newValue)
+                .then(function (value) {
+                    $scope.areaList = value.data;
+                });
+        }else {
+            $scope.areaList='';
+        }
+
+    });
+    $scope.$watch('address.provinceId', function (newValue, oldValue) {
+        if (newValue) {
+            baseService.sendGet("/address/findCity?provinceId=" + newValue)
+                .then(function (value) {
+                    $scope.cityList = value.data;
+                });
+        }
+    });
+    $scope.$watch('address.cityId', function (newValue, oldValue) {
+        if (newValue) {
+            baseService.sendGet("/address/findArea?cityId=" + newValue)
+                .then(function (value) {
+                    $scope.areaList = value.data;
+                });
+        }else {
+            $scope.areaList='';
+        }
+
+    });
+    $scope.updateUser=function () {
+      baseService.sendPost("/user/updateUser",$scope.user)
+          .then(function (value) {
+              if (value.data){
+                  alert("修改成功");
+                  location.href = "/home-index.html";
+              }else {
+                  alert("修改失败");
+              }
+          });
+    };
+
+    $scope.uploadFile=function () {
+        baseService.uploadFile().then(function (value) {
+            if(value.data.status == 200){
+                $scope.user.headPic = value.data.url;
+            }else {
+                alert("上传失败");
+            }
+        });
+    };
+
+    $scope.setAddressAlias=function (addressAlias) {
+        $scope.address.alias=addressAlias;
     };
 
 });

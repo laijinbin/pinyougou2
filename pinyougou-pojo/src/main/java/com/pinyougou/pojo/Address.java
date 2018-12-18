@@ -34,6 +34,46 @@ public class Address implements Serializable{
     private Date createDate;
 	@Column(name="alias")
     private String alias;
+    @Transient
+    private String provinceName;
+    @Transient
+    private String cityName;
+    @Transient
+    private String areaName;
+    @Transient
+    private String hiddenPhone;
+
+    public String getHidden() {
+        return hiddenPhone;
+    }
+
+    public void setHidden(String hiddenPhone) {
+        this.hiddenPhone = hiddenPhone;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
 
     public Long getId() {
         return id;

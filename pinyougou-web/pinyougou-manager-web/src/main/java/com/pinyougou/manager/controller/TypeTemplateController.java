@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-@RestController()
+@RestController
 @RequestMapping("/typeTemplate")
 public class TypeTemplateController {
 

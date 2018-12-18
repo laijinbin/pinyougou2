@@ -67,5 +67,20 @@ public class UserController {
       String userId=request.getRemoteUser();
        return userService.goNewPhone(userId,checkCode,allcode);
     }
+    @PostMapping("/updateUser")
+    public boolean updateUser(@RequestBody User user,HttpServletRequest request){
+        try {
+            userService.updateUser(user);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @GetMapping("/findUser")
+    public User findUser(HttpServletRequest request){
+        String username=request.getRemoteUser();
+       return userService.findUser(username);
+    }
 
 }

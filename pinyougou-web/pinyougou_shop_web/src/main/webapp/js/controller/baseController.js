@@ -60,7 +60,7 @@ app.controller("baseController", function($scope,baseService){
         return resArr.join(",");
     };
     $scope.findLoginName=function () {
-        baseService.sendGet("/login/findLoginName")
+        baseService.sendGet("/user/findLoginName")
             .then(function (value) {
                 $scope.loginUser.loginName=value.data.loginName;
                 $scope.loginUser.lastLoginTime=value.data.lastLoginTime;

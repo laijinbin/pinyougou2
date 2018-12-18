@@ -5,4 +5,5 @@ import tk.mybatis.mapper.common.Mapper;
 
 
 public interface AreasMapper extends Mapper<Areas> {
+    String findAreaName(String townId);
 }

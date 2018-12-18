@@ -19,4 +19,8 @@ public interface UserService {
     User findUserById(String remoteUser);
 
     Map<String,Object> goNewPhone(String userId,String checkCode, Map<String, String> allcode);
+
+    void updateUser(User user);
+
+    User findUser(String username);
 }

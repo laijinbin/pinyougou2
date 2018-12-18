@@ -98,7 +98,6 @@ public class WeixinPayServiceImpl implements WeixinPayService {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
-
         }
     }
 

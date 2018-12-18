@@ -10,14 +10,17 @@
         <security:http pattern="/plugins/**" security="none"></security:http>
         <security:http pattern="/js/**" security="none"></security:http>
         <security:http pattern="/seller/save" security="none"></security:http>
-    <security:http auto-config="true" use-expressions="true">
+    <security:http pattern="/manager/checkCode" security="none"></security:http>
+
+    <security:http auto-config="true" use-expressions="true" entry-point-ref="authenticationEntryPoint">
+        <security:intercept-url pattern="/user/login" access="permitAll"/>
         <security:intercept-url pattern="/**" access="hasRole('ROLE_SELLER')"></security:intercept-url>
-        <security:form-login
-            login-page="/shoplogin.html"
-            login-processing-url="/login"
-            default-target-url="/admin/index.html"
-            always-use-default-target="true"
-            authentication-failure-url="/shoplogin.html"></security:form-login>
+        <!--<security:form-login-->
+                <!--login-processing-url="/login"-->
+            <!--login-page="/shoplogin.html"-->
+            <!--default-target-url="/admin/index.html"-->
+            <!--always-use-default-target="true"-->
+            <!--authentication-failure-url="/shoplogin.html"></security:form-login>-->
         <security:logout
             logout-url="/logout"
             logout-success-url="/shoplogin.html"></security:logout>
@@ -27,7 +30,7 @@
             <security:frame-options policy="SAMEORIGIN"></security:frame-options>
         </security:headers>
     </security:http>
-    <security:authentication-manager>
+    <security:authentication-manager id="authenticationManager">
         <security:authentication-provider user-service-ref="userDetailsService">
             <security:password-encoder ref="bCryptPasswordEncoder"></security:password-encoder>
         </security:authentication-provider>
@@ -41,7 +44,9 @@
     </bean>
     <bean id="bCryptPasswordEncoder"
           class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
-    
-
-
+    <bean id="authenticationEntryPoint"
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <!-- 配置认证处理请求地址 -->
+        <constructor-arg value="/user/login"/>
+    </bean>
 </beans>

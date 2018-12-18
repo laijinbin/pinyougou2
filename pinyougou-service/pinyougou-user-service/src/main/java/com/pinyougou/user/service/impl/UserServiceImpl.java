@@ -150,5 +150,21 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
+    @Override
+    public void updateUser(User user) {
+        try {
+            userMapper.updateByPrimaryKeySelective(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Override
+    public User findUser(String username) {
+        User user=new User();
+        user.setUsername(username);
+        return userMapper.selectOne(user);
+
+    }
 }

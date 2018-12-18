@@ -21,4 +21,7 @@
     <select id="findPwdById" resultType="java.lang.String">
         select password FROM tb_seller where seller_id=#{sellerId}
     </select>
+    <select id="findNickNameById" resultType="java.lang.String">
+        SELECT nick_name from tb_seller where seller_id=#{sellerId}
+    </select>
 </mapper>

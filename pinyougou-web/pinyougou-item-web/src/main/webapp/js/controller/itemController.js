@@ -1,4 +1,4 @@
-app.controller('itemController',function ($scope,$controller){
+app.controller('itemController',function ($scope,$http,$controller){
 
     $controller('baseController',{$scope:$scope});
     $scope.specItems = {};
@@ -33,7 +33,17 @@ app.controller('itemController',function ($scope,$controller){
     };
 
     $scope.addToCart=function () {
-        alert($scope.sku.id);
+        // 发送异步请求(自已的域名: http://item.pinyougou.com)
+        $http.get("http://cart.pinyougou.com/cart/addCart?itemId="
+            + $scope.sku.id + "&num=" + $scope.num, {withCredentials:true}).then(function(response){
+            // 获取响应数据
+            if (response.data){
+                // 跳转到购物车系统
+                location.href = "http://cart.pinyougou.com";
+            }
+        },function (response) {
+            alert("加入购物车失败！");
+        });
     };
 
 
