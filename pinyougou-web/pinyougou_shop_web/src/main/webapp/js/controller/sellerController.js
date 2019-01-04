@@ -104,4 +104,9 @@ app.controller('sellerController', function ($scope, $http,$controller, $locatio
         }
 
     };
+    $scope.chongZhi=function () {
+        $scope.password.oldPwd=='';
+        $scope.password.newPwd=='';
+        $scope.confirmPassword='';
+    };
 });

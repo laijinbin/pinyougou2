@@ -30,7 +30,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
     @Autowired
     private SellerMapper sellerMapper;
-
     @Autowired
     private OrderItemMapper orderItemMapper;
     @Autowired
